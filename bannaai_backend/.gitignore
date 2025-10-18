@@ -1,0 +1,43 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+*.eggs/
+
+# Virtual environment
+venv/
+env/
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+
+# Environment variables and config
+.env
+.env.local
+.env.*
+
+# Database files (if using SQLite for testing)
+*.db
+*.sqlite3
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Byte-compiled / temporary files
+*.bak
+*.tmp
+*.temp
+
+# Build / dist folders
+build/
+dist/
