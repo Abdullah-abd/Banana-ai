@@ -30,3 +30,15 @@ def update_property(
     db.commit()
     db.refresh(property_obj)
     return property_obj
+@router.delete("/{property_id}")
+def delete_property(
+    property_id: int = Path(..., description="ID of the property to delete"),
+    db: Session = Depends(get_db)
+):
+    property_obj = db.query(Property).filter(Property.id == property_id).first()
+    if not property_obj:
+        raise HTTPException(status_code=404, detail="Property not found")
+    
+    db.delete(property_obj)
+    db.commit()
+    return {"detail": f"Property {property_id} deleted successfully"}
