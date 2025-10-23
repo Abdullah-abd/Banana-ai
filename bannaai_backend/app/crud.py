@@ -10,15 +10,27 @@ def create_property(db: Session, property: PropertyCreate):
     return db_property
 
 def get_properties(db: Session):
-    return db.query(Property).all()
+    """
+    Returns all properties with computed price_per_sqft.
+    """
+    properties = db.query(Property).all()
+    result = []
+    for p in properties:
+        price_per_sqft = (p.price / p.area_sqft) if p.area_sqft else 0
+        result.append({
+            "id": p.id,
+            "name": p.name,
+            "location": p.location,
+            "area_sqft": p.area_sqft,
+            "price": p.price,
+            "image": getattr(p, "image", None),
+            "price_per_sqft": price_per_sqft
+        })
+    return result
 
 def get_properties_sorted(db: Session):
     """
-    Returns all properties sorted by price per square foot (price / area_sqft).
-    If area_sqft is 0 or None, treats it as 0 to avoid division by zero.
+    Returns all properties sorted by price_per_sqft.
     """
-    properties = db.query(Property).all()
-    return sorted(
-        properties,
-        key=lambda x: (x.price / x.area_sqft) if x.area_sqft else 0
-    )
+    properties_with_ppsqft = get_properties(db)
+    return sorted(properties_with_ppsqft, key=lambda x: x["price_per_sqft"])
