@@ -13,4 +13,12 @@ def get_properties(db: Session):
     return db.query(Property).all()
 
 def get_properties_sorted(db: Session):
-    return sorted(db.query(Property).all(), key=lambda x: x.price_per_sqft)
+    """
+    Returns all properties sorted by price per square foot (price / area_sqft).
+    If area_sqft is 0 or None, treats it as 0 to avoid division by zero.
+    """
+    properties = db.query(Property).all()
+    return sorted(
+        properties,
+        key=lambda x: (x.price / x.area_sqft) if x.area_sqft else 0
+    )
